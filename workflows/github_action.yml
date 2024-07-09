@@ -1,0 +1,31 @@
+name Sync Image to Aliyun  Example
+
+on
+  push
+    branches [ main ]
+  pull_request
+    branches [ main ]
+
+jobs
+  build
+    runs-on ubuntu-latest
+
+    steps
+    - name Git pull
+      uses actionscheckout@v3
+      
+    - name Set up Docker Buildx
+      uses dockersetup-buildx-action@v2.9.1
+
+    - name Login to Docker Hub
+      uses dockerlogin-action@v2.2.0
+      with
+        registry registry.cn-hangzhou.aliyuncs.com
+        username 方达小丁云
+        password djw754963*
+        logout false
+        
+    - name Use Skopeo Tools Sync Image to Docker Hub
+      run 
+         skopeo copy dockerdocker.iohslrsun-panel1.4.0 dockerregistry.cn-hangzhou.aliyuncs.comweiyigeeksun-panel1.4.0
+      # 使用 skopeo 工具将镜像同步到阿里云个人仓库中，使用时请自行源和目标修改仓库名称和镜像名称
